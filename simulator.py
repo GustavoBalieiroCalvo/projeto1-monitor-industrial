@@ -8,20 +8,7 @@ equipamentos = [("Misturador Industrial A", "Linha 1 - Produção", "Misturador"
 
 sql_comando = 'SELECT id, nome FROM equipamentos'
 
-def gerar_leitura(conn, cursor, equipamentos_db):
-    for equipamento in equipamentos_db:
-        id_equipamento = equipamento[0]
-        temperatura = random.uniform(20.0, 90.0)
-        pressao = random.uniform(1.0, 10.0)
-        vibracao = random.uniform(0.1, 5.0)
-        datastamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        cursor.execute("INSERT INTO leituras (equipamento_id, timestamp, temperatura, vibracao, pressao) VALUES(?, ?, ?, ?, ?)",
-                       (id_equipamento, datastamp, temperatura, vibracao, pressao))
-        conn.commit()
-
-def main():
-    conn = sqlite3.connect('fabrica.db')
-    cursor = conn.cursor()
+def gerar_leitura(conn, cursor):
     cursor.execute(sql_comando)
     equipamentos_db = cursor.fetchall()
     if not equipamentos_db:
@@ -31,19 +18,39 @@ def main():
         )
         conn.commit()
         print("Equipamentos inseridos")
-    cursor.execute(sql_comando)
-    equipamentos_db = cursor.fetchall()
-    print(equipamentos_db)
+        cursor.execute(sql_comando)
+        equipamentos_db = cursor.fetchall()
+        print(equipamentos_db)
 
-    # try:
-    gerar_leitura(conn, cursor, equipamentos_db)
+    for equipamento in equipamentos_db:
+        id_equipamento = equipamento[0]
+        temperatura = random.uniform(20.0, 90.0)
+        pressao = random.uniform(1.0, 10.0)
+        vibracao = random.uniform(0.1, 5.0)
+        datastamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        cursor.execute("INSERT INTO leituras (equipamento_id, timestamp, temperatura, vibracao, pressao) VALUES(?, ?, ?, ?, ?)",
+                       (id_equipamento, datastamp, temperatura, vibracao, pressao))
+        conn.commit()
     print('Motor de simulação gerou dados')
-    # except:
-    #     print('Erro no motor de simulação')
-    
     cursor.execute("SELECT * FROM leituras")
     leituas = cursor.fetchall()
     print(leituas)
+
+    
+
+def main():
+    conn = sqlite3.connect('fabrica.db')
+    cursor = conn.cursor()
+
+    
+
+    # try:
+    gerar_leitura(conn, cursor)
+    
+    # except:
+    #     print('Erro no motor de simulação')
+    
+    
     conn.close()
 
 

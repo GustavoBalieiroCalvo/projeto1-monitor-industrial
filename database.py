@@ -19,15 +19,17 @@ def conecta_banco(nome_banco):
     conn = sqlite3.connect(nome_banco)
     return conn
     
-
-def main():
+def inicializa_banco():
     conn = conecta_banco('fabrica.db')
     cursor = conn.cursor()
     cursor.execute(sql_equipamentos)
     cursor.execute(sql_leituras)
     conn.commit()
     conn.close()
+    return conn
 
+def main():
+    inicializa_banco()
 
 if __name__ == '__main__':
     main()
