@@ -1,7 +1,6 @@
 import sqlite3
 from typing import Final
 
-NOME_DB: Final[str] = "fabrica.db"
 TEMP_MAX: Final[float] = 75.0
 PRESS_MAX: Final[float] = 8.0
 VIBRA_MAX: Final[float] = 4.0
@@ -34,7 +33,3 @@ def verificar_alertas(cursor):
             print(alerta)
             equipamentos_alerta[leitura["id"]] = True
     return equipamentos_alerta
-def conecta_db():
-    conn = sqlite3.connect(NOME_DB)
-    conn.row_factory = sqlite3.Row
-    return conn

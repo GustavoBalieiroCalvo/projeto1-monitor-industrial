@@ -2,18 +2,12 @@ import sqlite3
 from typing import Final
 from alerts import verificar_alertas
 
-NOME_DB: Final[str] = "fabrica.db"
 
 sql_comando = 'SELECT equipamentos.id, equipamentos.nome, MAX(leituras.timestamp),'\
 ' leituras.id, leituras.temperatura, leituras.pressao, leituras.vibracao'\
 ' FROM leituras'\
 ' JOIN equipamentos ON leituras.equipamento_id = equipamentos.id'\
 ' GROUP BY equipamentos.nome'
-
-def conecta_banco():
-    conn = sqlite3.connect(NOME_DB)
-    conn.row_factory = sqlite3.Row
-    return conn
 
 def gerar_relatorio(cursor):
     cursor.execute(sql_comando)
